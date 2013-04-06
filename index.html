@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+  <head>
+    <meta charset="utf-8">
+    <title>Flat UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.css" rel="stylesheet">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="demo-headline">
+        <h1 class="demo-logo">
+          KML to geoJSON
+          <small>Convert Your Project's KML overlay for use with MapIt!</small>
+        </h1>
+      </div> 
+      <div class="login">
+        <div class="login-screen">
+          <div class="login-icon">
+            <img src="images/login/map.png" alt="Welcome to KML to geoJSON" />
+            <h4>Welcome to <small>MapIt!</small></h4>
+          </div>
+
+          <div class="login-form">
+            <div class="control-group">
+              <form action="/file-upload" method="post" enctype="multipart/form-data">
+
+             <input type="file" class="btn btn-primary btn-large btn-block" value="" placeholder="Select KML File" name="kmlfile" id="login-name" />
+              <label class="login-field-icon fui-location-16" for="login-name"></label>
+            </div>
+
+            <div class="control-group">
+              <input type="text" class="login-field" value="" placeholder="Enter Project Name" name="projname" id="login-pass" />
+              <label class="login-field-icon fui-new-16" for="login-pass"></label>
+            </div>
+            <input class="btn btn-primary btn-large btn-block" type="submit" value="Send">
+          </form>
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+<!--
+    <form action="/file-upload" method="post" enctype="multipart/form-data">
+      <input type="file"  data-theme="a" name="kmlfile"  value="Select your KML file" />
+      <input type="text" data-theme="a" name="projname" value="Enter the Project Site Name" />
+      <h1>Show On Map?</h1>
+      <select name="flip-1" id="flip-1"  data-theme="b" data-role="slider">
+        <option value="off">Off</option>
+        <option value="on" selected>On</option>
+      </select>
+      <input type="submit" value="Send" name="kmlfile">
+    </form>
+-->

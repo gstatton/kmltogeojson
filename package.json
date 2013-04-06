@@ -1,0 +1,13 @@
+{
+  "name": "kmltogeojson",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "*",
+    "togeojson": "~0.1.1",
+    "fs": "*",
+    "jsdom": "*"
+  },
+  "engines": {
+    "node": ">=0.6"
+  }
+}
