@@ -19,36 +19,6 @@
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
     <![endif]-->
-	<script type="text/javascript">
-	 function getFile(){
-	   document.getElementById("upfile").click();
-	 }
-	 function sub(obj){
-	    var file = obj.value;
-	    var fileName = file.split("\\");
-	    document.getElementById("filebutn").innerHTML = fileName[fileName.length-1];
-	    document.myForm.submit();
-	    event.preventDefault();
-	  }
-	</script>
-	<style>
-	#filebutn{
-		  background-color: white;
-	      border: 2px solid #dce4ec; 
-	      color: #34495e; 
-	      font-family: "Lato", 
-	      sans-serif; 
-	      font-size: 14px; 
-	      padding: 8px 0 9px 10px;
-		  text-indent: 1px;
-		  -webkit-border-radius: 6px;
-		  -moz-border-radius: 6px;
-		  border-radius: 6px;
-		  -webkit-box-shadow: none;
-		  -moz-box-shadow: none;
-		  box-shadow: none;
-		}
-	</style>
   </head>
   <body>
     <div class="container">
@@ -68,11 +38,11 @@
           <div class="login-form">
             <div class="control-group">
               <form action="/file-upload" method="post" enctype="multipart/form-data">
-			
-			<div class="login-field" id='filebutn' onclick="getFile()">Choose a File</div>
-			<div style='height: 0px;width: 0px; overflow:hidden;'><input id="upfile" name="kmlfile" type="file" value="upload" onchange="sub(this)"/></div>
+
+             <input type="file" class="btn btn-primary btn-large btn-block" value="" placeholder="Select KML File" name="kmlfile" id="login-name" />
               <label class="login-field-icon fui-location-16" for="login-name"></label>
             </div>
+
             <div class="control-group">
               <input type="text" class="login-field" value="" placeholder="Enter Project Name" name="projname" id="login-pass" />
               <label class="login-field-icon fui-new-16" for="login-pass"></label>
@@ -83,3 +53,21 @@
           </div>
         </div>
       </div>
+
+
+
+
+
+
+<!--
+    <form action="/file-upload" method="post" enctype="multipart/form-data">
+      <input type="file"  data-theme="a" name="kmlfile"  value="Select your KML file" />
+      <input type="text" data-theme="a" name="projname" value="Enter the Project Site Name" />
+      <h1>Show On Map?</h1>
+      <select name="flip-1" id="flip-1"  data-theme="b" data-role="slider">
+        <option value="off">Off</option>
+        <option value="on" selected>On</option>
+      </select>
+      <input type="submit" value="Send" name="kmlfile">
+    </form>
+-->

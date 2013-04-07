@@ -69,6 +69,36 @@ app.get('/', function(req, res){
     
 });
 
+app.get('/display', function(req, res){
+  var items = [];
+  var body = "";
+  http.get(config, function(fetch) {
+    // console.log("Got response: " + fetch.statusCode);
+    fetch.on("data", function(chunk) {
+      body+=chunk;
+    });
+    fetch.on("end", function() {
+      simplexml.parse(body, function(e, parsed) {
+        if(e){
+          console.log("error");
+        } else {
+          items.push(parsed.channel.item)
+        }
+      });
+        res.render('display', { items: items });
+    });
+
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+    res.render('display', { items: [] });
+  });
+  // pull the latest LinkShortner Stats to DashKu
+  //dash.dashupdate();
+    
+});
+
+
+
 app.post('/convert', function(req, res){
 	fs.readFile(req.files.kmlfile.path, function (err, data) {
 		console.log("we are reading the file...");
