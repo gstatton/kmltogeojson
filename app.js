@@ -20,20 +20,14 @@ app.configure(function () {
     showStack: true,
     dumpExceptions: true
   }));
-  app.set('view engine', 'ejs');
-  app.use(express.cookieParser()); 
-  app.use(express.session({ secret: 'bsirocks' }));
   app.use(app.router); 
-  // app.use(app.router);
+
 });
 
 app.configure(function(){
   app.use(express.static(__dirname + '/static'));
 });
 
-//app.get('/', function(req, res){
-//  res.sendfile(__dirname + '/index.html');
-//});
 
 app.get('/', function(req, res){
 
@@ -41,7 +35,7 @@ app.get('/', function(req, res){
   var body = "";
 
   http.get(config, function(fetch) {
-    // console.log("Got response: " + fetch.statusCode);
+
 
 
     fetch.on("data", function(chunk) {
@@ -64,8 +58,6 @@ app.get('/', function(req, res){
     console.log("Got error: " + e.message);
     res.render('index', { items: [] });
   });
-  // pull the latest LinkShortner Stats to DashKu
-  //dash.dashupdate();
     
 });
 
@@ -92,27 +84,9 @@ app.get('/display', function(req, res){
     console.log("Got error: " + e.message);
     res.render('display', { items: [] });
   });
-  // pull the latest LinkShortner Stats to DashKu
-  //dash.dashupdate();
-    
+   
 });
 
-
-
-app.post('/convert', function(req, res){
-	fs.readFile(req.files.kmlfile.path, function (err, data) {
-		console.log("we are reading the file...");
-
-		console.log(data);
-		
-		var kml = jsdom(fs.readFileSync(data.path, 'utf8'));
-		console.log("we are converting the file");
-		var converted = tj.kml(kml);
-		var converted_with_styles = tj.kml(kml, { styles: true });
-		console.log(converted);
-	});
-
-});
 
 
 app.post('/file-upload', function(req, res) {
@@ -132,9 +106,6 @@ app.post('/file-upload', function(req, res) {
 
 	var contrivedObj = [];
 	contrivedObj.push( { "projectName" : projName, "geoJSON": converted_with_styles });
-
-	//console.log("contrived object:");
-	//console.log(contrivedObj);
 
 	fs.writeFile('./uploads/converted.txt', JSON.stringify(contrivedObj), function (err) {
 	  if (err) throw err;
@@ -159,17 +130,22 @@ var options = {
   headers: headers
 };
 
-var req = https.request(options, function(res) {
-    console.log("statuscode: ", res.statuscode);
-    console.log("headers: ", res.headers);
-    res.setEncoding('utf8');
-    res.on('data', function(d) {
-        process.stdout.write(d);
-    });
-    res.on('end', function(){ // see http nodejs documentation to see end
-        console.log("finished posting message");
-    });
+var req = http.request(options, function(res) {
+  res.setEncoding('utf-8');
+
+  var responseString = '';
+
+  res.on('data', function(data) {
+    responseString += data;
+  });
+
+  console.log("response String:" + JSON.parse(responseString));
+
+  res.on('end', function() {
+    var resultObject = JSON.parse(responseString);
+  });
 });
+
 
 req.on('error', function(e) {
 	console.log("error " + e);
