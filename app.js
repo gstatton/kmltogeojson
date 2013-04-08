@@ -119,7 +119,7 @@ app.post('/file-upload', function(req, res) {
 
 var headers = {
   'Content-Type': 'application/json',
-  'Content-Length': contrivedObj.length
+  'Content-Length': JSON.stringify(contrivedObj).length
 };
 
 var options = {
