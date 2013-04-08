@@ -152,9 +152,9 @@ var headers = {
 };
 
 var options = {
-  host: 'api.mypsn.com',
-  port: 443,
-  path: '/v1/poma/geotagger/jobmaps/',
+  host: 'localhost',
+  port: 9200,
+  path: '/geotagger/jobmaps/',
   method: 'POST',
   headers: headers
 };
