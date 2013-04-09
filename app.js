@@ -6,8 +6,7 @@ var tj = require("togeojson"),
 	express = require("express"),
     app = express(),
     request = require('request');
-    //https = require('https'),
-    //http = require('http');
+
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -62,35 +61,7 @@ app.get('/', function(req, res){
     
 });
 
-app.get('/display', function(req, res){
-  var items = [];
-  var body = "";
-  http.get(config, function(fetch) {
-    // console.log("Got response: " + fetch.statusCode);
-    fetch.on("data", function(chunk) {
-      body+=chunk;
-    });
-    fetch.on("end", function() {
-      simplexml.parse(body, function(e, parsed) {
-        if(e){
-          console.log("error");
-        } else {
-          items.push(parsed.channel.item)
-        }
-      });
-        res.render('display', { items: items });
-    });
-
-  }).on('error', function(e) {
-    console.log("Got error: " + e.message);
-    res.render('display', { items: [] });
-  });
-   
-});
-
-
-
-app.post('/file-upload', function(req, res) {
+app.post('/', function(req, res) {
     // get the temporary location of the file
     var tmp_path = req.files.kmlfile.path;
     console.log(tmp_path);
@@ -102,27 +73,17 @@ app.post('/file-upload', function(req, res) {
 
 	var converted = JSON.stringify(converted_with_styles);
 
-	console.log(converted);
 
 	var projName = req.body.projname;
 
 	var contrivedObj = { "projectName" : projName, "geoJSON": converted };
-	//contrivedObj.push( { "projectName" : projName, "geoJSON": converted_with_styles });
 
-//	fs.writeFile('./uploads/converted.txt', JSON.stringify(contrivedObj), function (err) {
-//	  if (err) throw err;
-//	  console.log('It\'s saved!');
-//	});
 
 	fs.unlink(tmp_path, function (err) {
   if (err) throw err;
   console.log('successfully deleted' + tmp_path);
 });
 
-console.log("About to Print the Body...........");
-
-
-console.log("This is what is going into the body: " + JSON.stringify( { "projectName" : projName, "geoJSON": converted } ));
 
 request.post({
   headers: {'content-type' : 'application/json'},
