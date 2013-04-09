@@ -61,7 +61,7 @@ app.get('/', function(req, res){
     
 });
 
-app.post('/mapmaking/file-upload', function(req, res) {
+app.post('/file-upload', function(req, res) {
     // get the temporary location of the file
     var tmp_path = req.files.kmlfile.path;
     console.log(tmp_path);
