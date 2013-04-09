@@ -4,7 +4,8 @@
   "dependencies": {
     "express": "*",
     "togeojson": "~0.1.1",
-    "jsdom": "*"
+    "jsdom": "*",
+    "request":"*"
   },
   "engines": {
     "node": ">=0.6"
