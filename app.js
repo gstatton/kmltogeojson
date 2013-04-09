@@ -29,7 +29,7 @@ app.configure(function(){
 });
 
 
-app.get('/', function(req, res){
+app.get('.', function(req, res){
 
   var items = [];
   var body = "";
@@ -61,7 +61,7 @@ app.get('/', function(req, res){
     
 });
 
-app.post('/', function(req, res) {
+app.post('/mapmaking', function(req, res) {
     // get the temporary location of the file
     var tmp_path = req.files.kmlfile.path;
     console.log(tmp_path);
@@ -133,7 +133,9 @@ var responseHTML =
   '<body>'+
     '<div class="container">'+
       '<div class="demo-headline">'+
+
         '<h1 class="demo-logo">'+
+        '<div class="demo-illustrations"><img src="images/illustrations/retina.png" class="big-retina-illustration"></div>' +
          ' You Did It!!!'+
          ' <small>Your file is now loaded into the system...</small>'+
         '</h1>'+
@@ -141,8 +143,8 @@ var responseHTML =
       '<div class="map-load">'+
 
         '<div class="login-screen">'+
+ //       '<div id="map-canvas"></div>'+
 
-        '<div id="map-canvas"></div>'+
 
 
          ' </div>'+
