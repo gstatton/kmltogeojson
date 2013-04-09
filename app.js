@@ -109,10 +109,10 @@ app.post('/file-upload', function(req, res) {
 	var contrivedObj = { "projectName" : projName, "geoJSON": converted };
 	//contrivedObj.push( { "projectName" : projName, "geoJSON": converted_with_styles });
 
-	fs.writeFile('./uploads/converted.txt', JSON.stringify(contrivedObj), function (err) {
-	  if (err) throw err;
-	  console.log('It\'s saved!');
-	});
+//	fs.writeFile('./uploads/converted.txt', JSON.stringify(contrivedObj), function (err) {
+//	  if (err) throw err;
+//	  console.log('It\'s saved!');
+//	});
 
 	fs.unlink(tmp_path, function (err) {
   if (err) throw err;
@@ -190,8 +190,6 @@ var responseHTML =
 '</body>'+
 '</html>'
 
-
-//res.send("file uploaded and converted!");
 res.send(responseHTML);
  });
 	
