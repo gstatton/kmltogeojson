@@ -5,8 +5,9 @@ var tj = require("togeojson"),
 	sys = require("sys"),
 	express = require("express"),
     app = express(),
-    https = require('https'),
-    http = require('http');
+    request = require('request');
+    //https = require('https'),
+    //http = require('http');
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -95,17 +96,18 @@ app.post('/file-upload', function(req, res) {
     console.log(tmp_path);
 
     var kml = jsdom(fs.readFileSync(tmp_path, 'utf8'));
-	console.log("we are converting the file");
-	var converted = tj.kml(kml);
+	console.log("we are converting the file...");
 	var converted_with_styles = tj.kml(kml, { styles: true });
-	//console.log(converted);
 
-	console.log(!(JSON.stringify(converted_with_styles)));
+
+	var converted = JSON.stringify(converted_with_styles);
+
+	console.log(converted);
 
 	var projName = req.body.projname;
 
-	var contrivedObj = [];
-	contrivedObj.push( { "projectName" : projName, "geoJSON": converted_with_styles });
+	var contrivedObj = { "projectName" : projName, "geoJSON": converted };
+	//contrivedObj.push( { "projectName" : projName, "geoJSON": converted_with_styles });
 
 	fs.writeFile('./uploads/converted.txt', JSON.stringify(contrivedObj), function (err) {
 	  if (err) throw err;
@@ -117,45 +119,80 @@ app.post('/file-upload', function(req, res) {
   console.log('successfully deleted' + tmp_path);
 });
 
-var headers = {
-  'Content-Type': 'application/json',
-  'Content-Length': JSON.stringify(contrivedObj).length
-};
+console.log("About to Print the Body...........");
 
-var options = {
-  host: 'localhost',
-  port: 9200,
-  path: '/geotagger/jobmaps/',
-  method: 'POST',
-  headers: headers
-};
 
-var req = http.request(options, function(res) {
-  res.setEncoding('utf-8');
+console.log("This is what is going into the body: " + JSON.stringify( { "projectName" : projName, "geoJSON": converted } ));
 
-  var responseString = '';
-
-  res.on('data', function(data) {
-    responseString += data;
-  });
-
-  console.log("response String:" + JSON.parse(responseString));
-
-  res.on('end', function() {
-    var resultObject = JSON.parse(responseString);
-  });
+request.post({
+  headers: {'content-type' : 'application/json'},
+  url:     'http://localhost:9200/geotagger/jobmaps',
+  body:    JSON.stringify( { "projectName" : projName, "geoJSON": converted } )
+}, function(error, response, body){
+  console.log("This is the body:  " + body);
+  console.log("This is the response:  " + response);
+  console.log("This is the error:  " + error);
 });
 
+var responseHTML = 
+'<html lang="en">' +
+  '<head>' +
+    '<meta charset="utf-8">' +
+    '<title>LogIT Map Creator</title>' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
 
-req.on('error', function(e) {
-	console.log("error " + e);
-});
-console.log("posting data to API server...");
-req.write(JSON.stringify(contrivedObj));
-req.end();
+    '<!-- Loading Bootstrap -->' +
+    '<link href="css/bootstrap.css" rel="stylesheet">' +
 
-res.send("file uploaded and converted!");
+    '<!-- Loading Flat UI -->' +
+    '<link href="css/flat-ui.css" rel="stylesheet">' +
+    '<link rel="shortcut icon" href="images/favicon.ico">' +
 
+	  '<style>'+
+      '#map-canvas {'+
+        'width: 500px;'+
+        'height: 400px;'+
+     ' }'+
+    '</style>'+
+	'<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>'+
+   ' <script>'+
+      'function initialize() {'+
+        'var map_canvas = document.getElementById("map-canvas");'+
+        'var map_options = {'+
+          'center: new google.maps.LatLng(44.5403, -78.5463),'+
+          'zoom: 8,'+
+          'mapTypeId: google.maps.MapTypeId.ROADMAP'+
+        '}'+
+        'var map = new google.maps.Map(map_canvas, map_options)'+
+      '}'+
+      'google.maps.event.addDomListener(window, ‘load’, initialize);'+
+    '</script>'+
+	'</style>'+
+  '</head>'+
+  '<body>'+
+    '<div class="container">'+
+      '<div class="demo-headline">'+
+        '<h1 class="demo-logo">'+
+         ' You Did It!!!'+
+         ' <small>Your file is now loaded into the system...</small>'+
+        '</h1>'+
+      '</div> '+
+      '<div class="map-load">'+
+
+        '<div class="login-screen">'+
+
+        '<div id="map-canvas"></div>'+
+
+
+         ' </div>'+
+     ' </div>'+
+
+'</body>'+
+'</html>'
+
+
+//res.send("file uploaded and converted!");
+res.send(responseHTML);
  });
 	
 app.listen(3000);
